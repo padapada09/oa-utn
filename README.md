@@ -1,68 +1,31 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Proyecto formato _.book_
 
-## Available Scripts
+## Abstract
 
-In the project directory, you can run:
+En este repositorio se encuentra el desarrollo de un nuevo formato de libros academicos interactivos. El mismo está siendo desarrollado en el contexto de un beca de investigación en la Universidad Tecnológica Nacional, Facultad Regional Santa Fe.<br/>
+Beca: _I-S-CIDISI-7757-Aplicaciones de técnicas de inteligencia artificial en plataformas de e-learning para dar soporte a estrategias pedagógicas_
 
-### `npm start`
+## Objetivo
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Encontrar nuevas herramientas para mejorar el aprendizaje de los estudiantes, implementando el concepto de "_Objetos de aprendizaje_" (De ahora en más OA). Dejando un camino definido y sencillo para que las mismas puedan ser implementadas por otros profesores.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## El formato propuesto
 
-### `npm test`
+El formato propuesto se basa en la construcción de documentos interactivos
+que tienen como atomo el "bloque".
+Este bloque tendrá un nombre y una serie de componentes que lo integren. Esta lista de componentes puede ser un texto, imagen, ... u otro bloque.
+Seccionar la interacción en bloques permite crear una estructura sencilla de navegar y consultar. Más adelante extenderemos los beneficios de manejar el concepto de bloque.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Interprete
 
-### `npm run build`
+En conjunto con el formato, se está desarrollando un interprete web. El mismo está diseñado para ser usado tanto en celulares como en computadoras.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Como correr el prototipo
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+El proyecto esta desarrollado usando react. Para correrlo se debe contar con node y npm.
+Si ya se tienen dichas herramientas solo hay que posicionarse en la ruta del proyecto y correr los comandos
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+        npm install
+        npm start
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Estos comandos levantarán un servidor de desarrollo en el puerto 3000.
