@@ -1,0 +1,11 @@
+.Container {
+    width: 100vw; height: 100vh;
+    display: flex;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    flex-direction: column;
+}
