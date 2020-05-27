@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-// import styles from './styles.module.scss';
+import styles from './styles.module.scss';
 
 const Text = ({component, ...props}) => 
 {
@@ -11,11 +11,7 @@ const Text = ({component, ...props}) =>
     },[onLoad]);
     
 
-    return (
-        <div ref={component.ref}>
-            <p>{component.text}</p>
-        </div>
-    );
+    return <p ref={component.ref} className={styles.Text}>{component.text}</p>;
 };
 
 export default Text;

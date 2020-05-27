@@ -15,15 +15,36 @@ const Navbar = ({blocks}) =>
     const [searching, setSearching] = useState(false);
     const getHeads = useCallback((block) => [block, ...(block.components.filter(component => component.type === 'block').map(block => getHeads(block)))].flat(Infinity),[]);
     const block_heads = useMemo(() => blocks.map(block => getHeads(block)).flat(Infinity),[blocks,getHeads]);
+    
     const goTo = (block) => scrollIntoView(block.ref.current, { time: 0 }, () => setTimeout(scrollIntoView(block.ref.current),100)) || collapse(true);
+
+    const goToSearchResult = (component) => scrollIntoView(component.block.ref.current, { time: 0 }, () => {
+        const from = Math.max(0,component.index-10);
+        const to = Math.min(component.index+30,component.text.length);
+        const left_text = component.text.slice(0,from);
+        const highlighted_text = component.text.slice(from,to);
+        const right_text = component.text.slice(to);
+        const selected_text = left_text + "<mark>" + highlighted_text + "</mark>" + right_text;
+        collapse(true);
+        setTimeout(() => 
+            scrollIntoView(component.ref.current, () => {
+                console.log("Selecting...");
+                component.ref.current.innerHTML = selected_text;
+            })
+        ,500);
+    });
     
-    const NavItem = ({index, style}) => <div style={style} className={styles.Item} onClick={() => goTo(block_heads[index])}>{block_heads[index].title}</div>;
+    const NavItem = ({index, style}) => (
+        <div style={style} className={styles.Item} onClick={() => goTo(block_heads[index])}>
+            {block_heads[index].title}
+        </div>
+    );
     
-    const Result = ({index, style}) => (
-        <div style={style} className={styles.SearchResult} onClick={() => goTo(search_results[index].block)}>
+    const ResultItem = ({index, style}) => (
+        <div style={style} className={styles.SearchResult} onClick={() => goToSearchResult(search_results[index])}>
             <Card text="info" bsPrefix={`card ${styles.Card}`}>
-                <Card.Header>{search_results[index].block.title}</Card.Header>
-                <Card.Body>{search_results[index].text.slice(search_results[index].index,search_results[index].index+50)}...</Card.Body>
+                <Card.Header>{search_results[index].block?.title || search_results[index].title}</Card.Header>
+                <Card.Body>{search_results[index].text.slice(Math.max(0,search_results[index].index-10),Math.min(search_results[index].text.length,search_results[index].index+50))}...</Card.Body>
             </Card>
         </div>
     )
@@ -41,16 +62,16 @@ const Navbar = ({blocks}) =>
             <div className={`${styles.Index} ${collapsed ? styles.Collapsed : ''}`}>
                 {   searching ?
                         <List
-                        height={window.innerWidth > 1100 ? window_height*0.90 : window_height*0.80}
+                        height={window.innerWidth > 1100 ? window_height*0.93 : window_height*0.80}
                         itemCount={search_results.length}
                         itemSize={160}
                         className={styles.List}
                         width={window.innerWidth > 1100 ? 300 : window.innerWidth}>
-                            {Result}
+                            {ResultItem}
                         </List>
                     :
                         <List
-                        height={window.innerWidth > 1100 ? window_height*0.90 : window_height*0.80}
+                        height={window.innerWidth > 1100 ? window_height*0.93 : window_height*0.80}
                         itemCount={block_heads.length}
                         itemSize={35}
                         className={styles.List}

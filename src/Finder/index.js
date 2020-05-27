@@ -1,45 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
+import FinderEngine from './FinderEngine';
 
 const Finder = ({blocks, setResults, results, focusSearch, collapse}) =>
 {
 
-    const [search, setSearch] = useState('');
+    const [query, setQuery] = useState('');
+    const [engine] = useState(new FinderEngine(blocks));
     const [error, setError] = useState(null);
     const self = useRef();
 
     useEffect(() => {
 
-        if (search) {
-            const searchBlock = (block) => {
-                return block.components
-                .filter(component => ['block','text'].includes(component.type))
-                .map(component => {
-                    if (component.type === 'block') return searchBlock(component);
-                    let appearences = [];
-                    let index = component.text.indexOf(search);
-                    while (index !== -1) {
-                        appearences.push(index);
-                        index = component.text.indexOf(search,index + 1);
-                    }
-                    return appearences.length ? appearences.map(appearence => ({...component, index: appearence})) : null;
-                })
-            }
-    
-            const results = blocks.map(block => searchBlock(block)).flat(Infinity).filter(block => block !== null);
-            if (results.length) {
-                setResults(results);
-                setError(null);
-            } else {
-                setResults([]);
-                setError('No se encontró resultados');
-            }
-        } else {
+        engine.search(query).then(res => {
+            console.log(res);
+            setResults(res);
+        }).catch((err) => {
+            console.log(err);
+            setError(err);
+        })
+
+        return () => {
             setResults([]);
             setError(null);
         }
 
-    },[search,blocks,setResults]);
+    },[query,engine,setResults]);
 
     return (
         <Form style={{padding: '10px', flex: 1, overflow: 'hidden'}} onSubmit={(event) => event.preventDefault() || self.current.blur()}>
@@ -47,14 +33,14 @@ const Finder = ({blocks, setResults, results, focusSearch, collapse}) =>
                 <Form.Control
                 ref={self}
                 onFocus={() => focusSearch(true) || collapse(false)}
-                onBlur={() => !search && focusSearch(false)}
+                onBlur={() => !query && focusSearch(false)}
                 isValid={results.length}
                 isInvalid={error}
-                value={search}
+                value={query}
                 placeholder="Escribí aquí para buscar un tema" 
-                onChange={(event) => setSearch(event.target.value)}/>
+                onChange={(event) => setQuery(event.target.value)}/>
                 <InputGroup.Append>
-                    <Button variant="outline-secondary" onClick={() => setSearch('') || focusSearch(false)}>x</Button>
+                    <Button variant="outline-secondary" onClick={() => setQuery('') || focusSearch(false)}>x</Button>
                 </InputGroup.Append>
             </InputGroup>
         </Form>
@@ -62,3 +48,15 @@ const Finder = ({blocks, setResults, results, focusSearch, collapse}) =>
 }
 
 export default Finder;
+
+// const looseIndexOfWord = (string_a, string_b, offset = 0) => 
+// {
+//     console.log(`/\b${string_b.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}\b/`);
+//     console.log(string_a.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").slice(offset).search(`/\b${string_b.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}\b/`));
+//     const regex = new RegExp(`/\b${string_b.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}\b/`);
+//     return string_a.toLowerCase()
+//     .normalize("NFD")
+//     .replace(/[\u0300-\u036f]/g, "")
+//     .slice(offset)
+//     .search(regex);
+// }

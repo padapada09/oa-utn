@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import VisibilitySensor from 'react-visibility-sensor';
 import Image from './Image';
 import Text from './Text';
+import List from './List';
 
 const Block = ({block, onLoad = () => undefined}) =>
 {
@@ -31,6 +32,7 @@ const Block = ({block, onLoad = () => undefined}) =>
                             switch (component.type) {
                                 case 'text': return !isVisible && height !== 'auto' ? null : <Text key={index} component={component} onLoad={() => setLoadedComponents(previous => previous + 1)}/>;
                                 case 'img': return !isVisible && height !== 'auto' ? null : <Image key={index} component={component} onLoad={() => setLoadedComponents(previous => previous + 1)}/>;
+                                case 'list': return !isVisible && height !== 'auto' ? null : <List key={index} component={component} onLoad={() => setLoadedComponents(previous => previous + 1)}/>;
                                 case 'block': return <Block key={index} block={component} onLoad={() => setLoadedComponents(previous => previous + 1)}/>;
                                 default: return (<h2 key={index}>Component not suported {component.typ}</h2>);
                             }
