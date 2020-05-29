@@ -6,6 +6,9 @@
     z-index: 10;
     transition: width 0.5s;
     top: 0px;
+    -webkit-box-shadow: 0px 5px 13px -8px rgba(0,0,0,0.47);
+    -moz-box-shadow: 0px 5px 13px -8px rgba(0,0,0,0.47);
+    box-shadow: 0px 5px 13px -8px rgba(0,0,0,0.47);
 
     @media (min-width: 1100px) {
         height: 100vh;
@@ -18,10 +21,37 @@
     
         &:hover {
             width: 300px;
-    
             * {
                 opacity: 1;
             }
+        }
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+}
+
+.NavbarFixed {
+
+    background-color: rgb(240, 240, 240);
+    width: 100vw;
+    position: fixed;
+    z-index: 10;
+    transition: width 0.5s;
+    top: 0px;
+    -webkit-box-shadow: 0px 5px 13px -8px rgba(0,0,0,0.47);
+    -moz-box-shadow: 0px 5px 13px -8px rgba(0,0,0,0.47);
+    box-shadow: 0px 5px 13px -8px rgba(0,0,0,0.47);
+
+    @media (min-width: 1100px) {
+        height: 100vh;
+        position: relative;
+        width: 300px;
+        
+        * {
+            opacity: 1;
         }
     }
 

@@ -69,8 +69,20 @@
                             "Pobremente Diferenciados",
                             "Falta de Diferenciación: ANAPLASIA"
                         ]
+                    },{
+                        "title": "Anaplasia",
+                        "type": "block",
+                        "components": [
+                            {
+                                "type": "text",
+                                "text": "La anaplasia tiene una serie de particularidades"
+                            }
+                        ]
                     }
                 ]
+            },{
+                "type":"img",
+                "name":"paisaje.jpeg"
             }
         ]
     }

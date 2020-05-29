@@ -4,8 +4,16 @@
     position: fixed;
     top: 0px;
     left: 0px;
+    z-index: 999;
     align-items: center;
     justify-content: center;
     background: white;
     flex-direction: column;
+}
+
+.Message {
+    margin-top: 10vh;
+    width: 100%;
+    text-align: center;
+    font-size: large;
 }

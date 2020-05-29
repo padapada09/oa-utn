@@ -3,16 +3,19 @@ import { useState, useEffect, createRef } from 'react';
 const useBlocks = (book) =>
 {
 
-    const [blocks, setBlocks] = useState({loading: true});
+    const [blocks, setBlocks] = useState([]);
 
     useEffect(() =>
     {
-        const generateRefsToBlocks = () => {
 
-            const generateRefsToComponents = (block, components) => {
+        setBlocks([]);
+        
+        const generateRefsToBlocks = (book) => {
+
+            const generateRefsToComponents = (block, parent_block) => {
                 const ref = createRef();
-                return {ref, ...block, components: components.map(component => {
-                    if (component.type === 'block') return generateRefsToComponents(component.components);
+                return {ref, ...block, block: parent_block, components: block.components.map(component => {
+                    if (component.type === 'block') return generateRefsToComponents(component);
                     else return {ref: createRef(), ...component, block: {...block, ref}};
                 })};
             }
@@ -20,13 +23,13 @@ const useBlocks = (book) =>
             return book.map((block) => {
                 const ref = createRef();
                 return {ref, ...block, type: 'block', components: block.components.map(component => {
-                    if (component.type === 'block') return generateRefsToComponents(component, component.components);
+                    if (component.type === 'block') return generateRefsToComponents(component,{ref, ...block});
                     else return {ref: createRef(), ...component, block: {...block, ref}};
                 })};
             });
         }
 
-        setBlocks(generateRefsToBlocks());
+        if (book) setBlocks(generateRefsToBlocks(book));
 
     },[book]);
     

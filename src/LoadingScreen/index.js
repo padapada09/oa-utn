@@ -6,7 +6,7 @@ const LoadingScreen = ({message}) => {
     return (
         <div className={styles.Container}>
             <Spinner animation="border" role="status" />
-            <h1>{message}</h1>
+            <h1 className={styles.Message}>{message}</h1>
         </div>
     );
 }

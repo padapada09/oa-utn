@@ -32,7 +32,7 @@ class FinderEngine {
         const normalized_string = string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const regex = new RegExp("\\b"+normalized_sub_string+"\\b","ig");
         let { results, match } = { results: [], match: null};
-        while (match = regex.exec(normalized_string)) results.push(match.index);
+        while ((match = regex.exec(normalized_string))) results.push(match.index);
         return results;
     }
 

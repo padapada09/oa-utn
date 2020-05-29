@@ -11,31 +11,22 @@ const window_height = window.innerHeight;
 const Navbar = ({blocks}) =>
 {
     const [collapsed, collapse] = useState(true);
-    const [search_results, setSearchResults] = useState([]);
-    const [searching, setSearching] = useState(false);
+    const [search_results, setSearchResults] = useState(null);
     const getHeads = useCallback((block) => [block, ...(block.components.filter(component => component.type === 'block').map(block => getHeads(block)))].flat(Infinity),[]);
     const block_heads = useMemo(() => blocks.map(block => getHeads(block)).flat(Infinity),[blocks,getHeads]);
     
-    const goTo = (block) => scrollIntoView(block.ref.current, { time: 0 }, () => setTimeout(scrollIntoView(block.ref.current),100)) || collapse(true);
-
-    const goToSearchResult = (component) => scrollIntoView(component.block.ref.current, { time: 0 }, () => {
-        const from = Math.max(0,component.index-10);
-        const to = Math.min(component.index+30,component.text.length);
-        const left_text = component.text.slice(0,from);
-        const highlighted_text = component.text.slice(from,to);
-        const right_text = component.text.slice(to);
-        const selected_text = left_text + "<mark>" + highlighted_text + "</mark>" + right_text;
+    const goToBlock = (block) => {
+        scrollIntoView(block.ref.current,{time: 0});
         collapse(true);
-        setTimeout(() => 
-            scrollIntoView(component.ref.current, () => {
-                console.log("Selecting...");
-                component.ref.current.innerHTML = selected_text;
-            })
-        ,500);
-    });
+    }
+
+    const goToSearchResult = (component) => {
+        scrollIntoView(component.ref.current,{time: 0});
+        collapse(true);
+    }
     
     const NavItem = ({index, style}) => (
-        <div style={style} className={styles.Item} onClick={() => goTo(block_heads[index])}>
+        <div style={style} className={styles.Item} onClick={() => goToBlock(block_heads[index])}>
             {block_heads[index].title}
         </div>
     );
@@ -49,10 +40,25 @@ const Navbar = ({blocks}) =>
         </div>
     )
 
+    function onFocus () {
+        setSearchResults([]);
+        collapse(false);
+    }
+
+    function onBlur () {
+        setSearchResults(null);
+        if (window.innerWidth > 1100) collapse(true);
+    }
+
     return (
-        <div className={styles.Navbar}>
+        <div className={collapsed ? styles.Navbar : styles.NavbarFixed}>
             <div className={styles.Header}>
-                <Finder blocks={blocks} setResults={setSearchResults} results={search_results} focusSearch={setSearching} collapse={collapse}/>
+                <Finder
+                blocks={blocks} 
+                setResults={setSearchResults} 
+                results={search_results} 
+                onFocus={onFocus}
+                onBlur={onBlur}/>
                 <div className={styles.ButtonContainer}>
                     <Button onClick={() => collapse(!collapsed)}>
                         <Menu />
@@ -60,7 +66,7 @@ const Navbar = ({blocks}) =>
                 </div>
             </div>
             <div className={`${styles.Index} ${collapsed ? styles.Collapsed : ''}`}>
-                {   searching ?
+                {   search_results ?
                         <List
                         height={window.innerWidth > 1100 ? window_height*0.93 : window_height*0.80}
                         itemCount={search_results.length}
