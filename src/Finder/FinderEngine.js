@@ -8,7 +8,7 @@ class FinderEngine {
 
     search (query) {
         return new Promise((res,rej) => {
-            if (!query) res([]);
+            if (!query) res(null);
             else {
                 const results = this.#blocks.map(block => this.searchBlock(block,query)).flat(Infinity);
                 if (results.length) res(results);

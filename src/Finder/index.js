@@ -48,6 +48,7 @@ const Finder = ({blocks, setResults, results, onFocus, onBlur}) =>
     function onCancel () {
         setQuery('');
         onBlur();
+        setResults(null);
         setError(null);
     }
 
