@@ -16,7 +16,9 @@ const Youtube = ({component, ...props}) =>
     return (
         <VisibilitySensor onChange={(visible) => setVisibility(visible)} intervalDelay={300} offset={{top: 0, bottom: 0}} partialVisibility>
             {   visible ?
-                    <iframe width={window.innerWidth > 1100 ? window.innerWidth/2 : window.innerWidth- 40} height={height} src={`https://www.youtube.com/embed/${component.id}`}/>
+                    <div style={{ height, width: '100%', display: 'flex', justifyContent: 'center'}}>
+                        <iframe width={window.innerWidth > 1100 ? window.innerWidth/2 : window.innerWidth- 40} height={height} src={`https://www.youtube.com/embed/${component.id}`}/>
+                    </div>
                 :   <div style={{ height }} ref={component.ref}/>
             }
         </VisibilitySensor>

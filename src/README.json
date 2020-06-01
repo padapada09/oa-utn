@@ -32,7 +32,7 @@
                         "text": "Además de los componentes nombrados más arriba, la lista de componentes de un bloque puede estar conformada por otros bloques, de hecho, este bloque de texto es un componente del bloque 'Recursividad', que a su vez es un componente del bloque 'Introducción y conceptos claves'. Esto mismo nos da la posibilidad de entender la interacción documentada como un arbol de bloques que se relacionan entre sí para crear el objeto de aprendizaje final. Esto nuevamente nos ayudará más adelante cuando avancemos en nuestro sistema de búsqueda."
                     },{
                         "type": "text",
-                        "text": "Si bien esto nos permite expresar la idea de capitulos y subcapitulos, o secciones y subsecciones; me parece interesante liberarse de los limites del libro convencional, y entender al documento más bien como un conjunto de modulos, que si bien las diferencias pueden ser poco claras, nos da un punto de partida separado al del libro invitándonos a una forma de pensar diferente."
+                        "text": "Si bien esto nos permite expresar la idea de capítulos y subcapítulos, o secciones y subsecciones; me parece interesante liberarse de los limites del libro convencional, y entender al documento más bien como un conjunto de modulos, que si bien las diferencias pueden ser poco claras, nos da un punto de partida separado al del libro invitándonos a una forma de pensar diferente."
                     }
                 ]
             },{
@@ -44,7 +44,7 @@
                         "text": "Frente a las grandes necesidades de accesibilidad a la información, y dentro de un contexto que nos ofrece herramientas para combatir la lucha de la imposibilidad a acceder. En el desarrollo del formato .book se intenta hacer un pequeño esfuerzo para hacer uso de las herramientas ya existentes (dentro del estandar HTML) y así ofrecer compatibilidad con los softwares de asistencia al lector."
                     },{
                         "type": "text",
-                        "text": "Esto en palabras menos pretenciosas significa que el documento que usted está leyendo ahora mismo puede (o al menos debería...) poder ser leido sin mayores inconvenientes por un sistema de 'Talkback' convencional."
+                        "text": "Esto en palabras menos pretenciosas significa que el documento que usted está leyendo ahora mismo puede (o al menos debería...) poder ser leído sin mayores inconvenientes por un sistema de 'Talkback' convencional."
                     }
                 ]
             },{
@@ -53,7 +53,7 @@
                 "components": [
                     {
                         "type": "text",
-                        "text": "El documento puede ser leido desde cualquier dispositivo con acceso a un navegador. El documento se adapta a cualquier tipo de pantalla y utiliza un sistema de virtualización de listas que permite mantener una performance aceptable en documentos de cientos de bloques."
+                        "text": "El documento puede ser leído desde cualquier dispositivo con acceso a un navegador. El documento se adapta a cualquier tipo de pantalla y utiliza un sistema de virtualización de listas que permite mantener una performance aceptable en documentos de cientos de bloques."
                     }
                 ]
             }
@@ -71,7 +71,7 @@
                 "components": [
                     {
                         "type": "text",
-                        "text": "Si bien este bloque no requiere mayor explicación, tiene un agregado importante para los profesores de ciencias exactas. Incluye un interprete de latex. Lo cual nos permite escribir R^n \\to R^m y obtener como resultado en el documento <TeX>R^n \\to R^m<TeX>. Entre otras ventajas, esto nos permite poder liberarnos de las formulas como imagenes, las cuales requieren mayor ancho de banda y no pueden ser copiadas directamente. Sin hablar de que estas formulas al igual que el resto del texto, pueden ser leidas por un lector de pantallas."
+                        "text": "Si bien este bloque no requiere mayor explicación, tiene un agregado importante para los profesores de ciencias exactas. Incluye un interprete de latex. Lo cual nos permite escribir R^n \\to R^m y obtener como resultado en el documento <TeX>R^n \\to R^m<TeX>. Entre otras ventajas, esto nos permite poder liberarnos de las formulas como imagenes, las cuales requieren mayor ancho de banda y no pueden ser copiadas directamente. Sin hablar de que estas formulas al igual que el resto del texto, pueden ser leídas por un lector de pantallas."
                     },{
                         "type": "text",
                         "text": "Otro punto importante, esta vez para cualquier area, es que los bloques de texto también interpretan html (con barreras de seguridad para evitar que se pueda ejecutar código malicioso) permitiendo hacer uso de <b> palabras en negrita </b>, <i> cursiva </i>, y <u> subrayado </u>, entre otras cosas."
@@ -89,7 +89,7 @@
                        "src": "https://i.ya-webdesign.com/images/carlton-banks-dance-gif-png.gif" 
                     },{
                         "type": "text",
-                        "text": "Si bien parezca medio sonso, el tener GIFs puede ser una herramienta muy poderosa. Por ejemplo, imaginemos el caso en el que queremos visualizar un campo vectorial en acción. Tenemos dos formas de hacero..."
+                        "text": "Si bien parezca poco importante, el tener GIFs puede ser una herramienta muy poderosa. Por ejemplo, imaginemos el caso en el que queremos visualizar un campo vectorial en acción. Tenemos dos formas de hacerlo..."
                     },{
                         "type": "img",
                         "src": "https://lh3.googleusercontent.com/proxy/KsWn0AROR2oPW2h4Wvmaq4gXHFwxApPbUYF9PrulOj1zNzx7dCbzBfwrl7L56oaeJOD3nrffv6Z2McNYgzzQ_M73-b5wNCTmJbTBMJxrz_sjUJzXht65tbjt5IqSQC45F8TI2j_CnsJD"
@@ -133,17 +133,17 @@
         ]
     },{
         "type": "block",
-        "title": "Busquedas",
+        "title": "Búsquedas",
         "components": [
             {
                 "type": "text",
-                "text": "Una parte importante del formato es poder ordenar la información de manera que empodere al lector. Y para poder dotar al estudiante con dicho poder, tenemos que darle herramientas que le permitan encontrar la información entre todos los bloques de datos que se le presentan. Por esto mismo, el lector cuenta con un motor (Que por ahora es bastante bobo) encargado ejecutar consultas y devolver tarjetas rankeadas con el bloque y el extracto de texto al cual adjudica su desición."
+                "text": "Una parte importante del formato es poder ordenar la información de manera que empodere al lector. Y para poder dotar al estudiante con dicho poder, tenemos que darle herramientas que le permitan encontrar la información entre todos los bloques de datos que se le presentan. Por esto mismo, el lector cuenta con un motor (Que por ahora es bastante básico) encargado de ejecutar consultas y devolver tarjetas rankeadas con el bloque y el extracto de texto al cual adjudica su desición."
             },{
                 "type": "text",
                 "text": "Para acceder a esta funcionalidad desde la computadora se puede pasar el cursor por la zona izquierda del documento y seleccionar el input que se revela, o apretar 'Ctrl+F'. En el caso del celular se encuentra siempre accesible en la parte superior de la navegación."
             },{
                 "type": "text",
-                "text": "Por ahora es más un promesa que una realidad, pero ya el hecho de mostrar los resultados ordenados en tarjetas con 'previews' del contenido al que llevan es una gran ventaja a otras formas de búsqueda más tradicional. Como idea general, busco implementar los metodos de búsqueda de google, pero en un documento."
+                "text": "Por ahora es más un promesa que una realidad, pero ya el hecho de mostrar los resultados ordenados en tarjetas con 'previews' del contenido al que llevan es una gran ventaja respecto de otras formas de búsqueda más tradicional. Como idea general, busco implementar los metodos de búsqueda de google, pero en un documento."
             }
         ]
     }

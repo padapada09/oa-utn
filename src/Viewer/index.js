@@ -31,7 +31,7 @@ const Viewer = ({book}) => {
     return (
         <>
             <Navbar blocks={blocks}/>
-            <Container className={styles.Container}>
+            <Container className={styles.Container} style={window.innerWidth < 1100 ? {maxWidth: '100%'} : undefined}>
                 {blocks.map((block,index) => <Block key={index} block={block} onLoad={() => setLoadedComponents((prev) => prev + 1)}/> )}
             </Container>
             { !blocks.length && <LoadingScreen message={"Cargando el libro"} />}
