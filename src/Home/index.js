@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Container, Card, Button} from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+import { Form, Container, Card, Button } from 'react-bootstrap';
 import LoadingScreen from '../LoadingScreen';
 import JSZip from 'jszip';
 import addImageToBlocks from './addImageToBlocks';
-import recents from './recents.json';
-import fake_book from '../fake_book.json';
+import README from '../README.json';
 
 const Home = ({setBook}) => {
 
+    const history = useHistory();
     const [blocks, setBlocks] = useState(null);
     const [zip, setZip] = useState(null);
     const [loading, setLoading] = useState(null);
     const [loaded_files, setLoadedFiles] = useState(0);
     const [book_files_count, setBookFilesCount] = useState(Infinity);
-
-    useEffect(() => { window.history.pushState({page: 'file_selection'},'') },[]);
 
     useEffect(() => {
         if (zip) try {
@@ -47,8 +46,10 @@ const Home = ({setBook}) => {
     useEffect(() => {
         if (loaded_files === book_files_count) {
             setBook(blocks);
+            setLoading(false);
+            history.push('/view');
         }
-    },[book_files_count,blocks,loaded_files,setBook])
+    },[book_files_count,blocks,loaded_files,setBook,history])
 
     function chooseFile (file) {
         setLoading(true);
@@ -61,8 +62,9 @@ const Home = ({setBook}) => {
             }
             reader.readAsArrayBuffer(file);
         } else {
-            setBook(fake_book);
-            window.history.pushState({page: 'file_view'},'');
+            setBlocks(README);
+            setBookFilesCount(0);
+            setLoadedFiles(0);
         }
     }
 
@@ -75,18 +77,14 @@ const Home = ({setBook}) => {
                 <Form.File label="Ingresa un libro para visualizar" custom onChange={({target}) => chooseFile(target.files[0])}/>
             </Form>
             <Container style={{flex: 1, padding: '20px', overflow: 'scroll', marginTop: '20px'}}>
-                {
-                    recents.map((book,index) => 
-                        <Card key={index} style={{ width: '100%', marginTop: '20px' }}>
-                            <Button variant="outline-primary" onClick={() => chooseFile(book)}>
-                                <Card.Body style={{textAlign: 'left'}}>
-                                    <Card.Title>{book.title}</Card.Title>
-                                    <Card.Text>{book.description}</Card.Text>
-                                </Card.Body>
-                            </Button>
-                        </Card>
-                    )
-                }
+                <Card style={{ width: '100%', marginTop: '20px' }}>
+                    <Button variant="outline-primary" onClick={() => chooseFile('README')}>
+                        <Card.Body style={{textAlign: 'left'}}>
+                            <Card.Title>Documentación</Card.Title>
+                            <Card.Text>Ejemplo de .book con la documentación del proyecto y el formato. Presioná esta tarjeta si querés visualizarlo</Card.Text>
+                        </Card.Body>
+                    </Button>
+                </Card>
             </Container>
         </Container>
     )

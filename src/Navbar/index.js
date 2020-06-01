@@ -60,7 +60,7 @@ const Navbar = ({blocks}) =>
                 onFocus={onFocus}
                 onBlur={onBlur}/>
                 <div className={styles.ButtonContainer}>
-                    <Button onClick={() => collapse(!collapsed)}>
+                    <Button onClick={() => collapse(!collapsed)} tabIndex={-1}>
                         <Menu />
                     </Button>
                 </div>

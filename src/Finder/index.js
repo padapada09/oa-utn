@@ -63,9 +63,10 @@ const Finder = ({blocks, setResults, results, onFocus, onBlur}) =>
                 isInvalid={error}
                 value={query}
                 placeholder="Escribí aquí para buscar un tema" 
-                onChange={(event) => setQuery(event.target.value)}/>
+                onChange={(event) => setQuery(event.target.value)}
+                tabIndex={-1}/>
                 <InputGroup.Append>
-                    <Button variant="outline-secondary" onClick={onCancel}>x</Button>
+                    <Button variant="outline-secondary" aria-label="Cancelar búsqueda" onClick={onCancel} tabIndex={-1}>x</Button>
                 </InputGroup.Append>
             </InputGroup>
         </Form>
