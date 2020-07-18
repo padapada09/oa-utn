@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './styles.module.scss';
 import VisibilitySensor from 'react-visibility-sensor';
 import katex from 'katex';
@@ -6,7 +6,7 @@ import getLaTex from './getLaTex';
 import removeLaTex from './removeLatex';
 import parse from 'html-react-parser';
 
-const Text = ({component, onLoad, ...props}) => 
+const Text = ({component, onLoad}) => 
 {
 
     const [height, setHeight] = useState('auto');
@@ -23,7 +23,7 @@ const Text = ({component, onLoad, ...props}) =>
         }
 
         loadText();
-    },[]);
+    },[component]);
 
     useEffect(() => {
         function parseHtml () {
@@ -42,7 +42,7 @@ const Text = ({component, onLoad, ...props}) =>
         }
 
         if (html && height === 'auto') load();
-    },[html,onLoad,height]);
+    },[html,onLoad,height,self]);
 
     return (
         <VisibilitySensor onChange={(visible) => setVisibility(visible)} intervalDelay={300} offset={{top: 0, bottom: 0}} partialVisibility>

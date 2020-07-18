@@ -1,0 +1,45 @@
+[
+    {
+        "question": "¿Cual es la raíz cuadrada de 4?",
+        "options": [
+            {
+                "value": 4,
+                "correct": false
+            },{
+                "value": 8,
+                "correct": false
+            },{
+                "value": 2,
+                "correct": true
+            }
+        ]
+    },{
+        "question": "¿Cual es la raíz cuadrada de 8?",
+        "options": [
+            {
+                "value": 4,
+                "correct": true
+            },{
+                "value": 8,
+                "correct": false
+            },{
+                "value": 2,
+                "correct": false
+            }
+        ]
+    },{
+        "question": "¿Cual es la raíz cuadrada de 10?",
+        "options": [
+            {
+                "value": 4,
+                "correct": false
+            },{
+                "value": 8,
+                "correct": false
+            },{
+                "value": "No existe dentro del conjunto de números enteros",
+                "correct": true
+            }
+        ]
+    }
+]

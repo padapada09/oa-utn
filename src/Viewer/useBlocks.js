@@ -31,7 +31,6 @@ const useBlocks = (book) =>
 
         if (book && book.length) setBlocks(() => {
             const res = generateRefsToBlocks(book);
-            console.log("Finish loading the blocks to memory");
             return res;
         });
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import VisibilitySensor from 'react-visibility-sensor';
 import katex from 'katex';
 import getLaTex from '../Text/getLaTex';
@@ -23,7 +23,7 @@ const List = ({component, onLoad, ...props}) =>
         }
 
         loadList();
-    },[]);
+    },[component,self]);
 
     useEffect(() => {
         function parseHtml () {
@@ -42,7 +42,7 @@ const List = ({component, onLoad, ...props}) =>
         }
 
         if (html && height === 'auto') load();
-    },[html,height,onLoad]);
+    },[html,height,onLoad,self]);
 
     return (
         <VisibilitySensor onChange={(visible) => setVisibility(visible)} intervalDelay={300} offset={{top: 0, bottom: 0}} partialVisibility>
