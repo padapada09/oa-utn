@@ -1,7 +1,11 @@
 import React from 'react';
 
 const Text = (props) => {
-    return props.texto;
+    return (
+        <p>
+            {props.texto}
+        </p>
+    );
 }
 
 export default Text;

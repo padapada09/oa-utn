@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 const useEvaluation = (id,book) => {
 
-    const history = useHistory();
     const [problems, setProblems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [answers, setAnswers] = useState([]);
     const [problem, setProblem] = useState({});
     const [index, setIndex] = useState(0);
     const [error, setError] = useState();
@@ -21,8 +20,13 @@ const useEvaluation = (id,book) => {
         setLoading(false);
     },[book,id]);
 
+    useEffect(() => {
+        if (index === problems.length) {
+            window.localStorage.setItem(id,answers.reduce((total,value) => total + value,0)/problems.length);
+        }
+    },[index]);
+
     function checkAnswer(problem_id,answer) {
-        const question = problems.find(problem => problem.id === problem_id);
         const correct_answer = problem.opciones.find(option => option.correcta).valor;
         if (correct_answer === answer) {
             setProblems(problems => 
@@ -34,17 +38,18 @@ const useEvaluation = (id,book) => {
             setProblem(problems[index + 1]);
             setError();
             setDone((index + 1)/problems.length);
-            if (index + 1 === problems.length) {
-                window.localStorage.setItem(id,wrong_answers);
+            if (answers[index] === undefined) {
+                setAnswers([...answers, true]);
             }
         } else {
-            const new_wrong_answers = wrong_answers + 1;
-            setWrongAnswers(new_wrong_answers);
+            if (answers[index] === undefined) {
+                setAnswers([...answers, false]);
+            }
             setError("Respuesta incorrecta");
         }
     }
 
-    return { problems, checkAnswer, loading, problem, error, wrong_answers, done };
+    return { problems, checkAnswer, loading, problem, error, answers, done };
 }
 
 export default useEvaluation;

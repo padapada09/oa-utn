@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Container, Card, Button } from 'react-bootstrap';
-import Navbar from '../Navbar';
-import LoadingScreen from '../LoadingScreen';
-import Block from '../Block';
-import Controller from '../Controller';
+//import Navbar from '../Navbar';
+//import LoadingScreen from '../LoadingScreen';
+//import Block from '../Block';
+//import Controller from '../Controller';
 // import styles from './styles.module.scss';
-import useBlocks from './useBlocks';
-import getComponentAmount from './getComponentAmount';
+//import useBlocks from './useBlocks';
+//import getComponentAmount from './getComponentAmount';
 import scrollIntoView from 'scroll-into-view';
 
 const Viewer = ({book}) => {
@@ -32,17 +32,27 @@ const Viewer = ({book}) => {
     return (
         <Container style={styles.container}>
             {
-                book.map(({titulo, descripcion, id},index) => 
-                    <Card key={index} style={styles.card} bg={window.localStorage.getItem(id) ? 'success' : undefined}>
-                        <Card.Body>
-                            <Card.Title>{titulo}</Card.Title>
-                            <Card.Text>
-                                {descripcion}
-                            </Card.Text>
-                            <Button variant="primary" onClick={() => history.push(`/contenido/${id}`)}>Go somewhere</Button>
-                        </Card.Body>
-                    </Card>
-                )
+                book.map(({titulo, descripcion, id},index) => {
+
+                    const score = window.localStorage.getItem(id);
+
+                    return (
+                        <Card
+                        as={Button}
+                        key={index}
+                        onClick={() => setTimeout(() => history.push(`/contenido/${id}`),200)}
+                        style={{...styles.card, backgroundColor: score === null ? 'white' : `hsl(${score*100},80%,60%)`}}>
+                            <Card.Body>
+                                <Card.Title>
+                                    {titulo}
+                                </Card.Title>
+                                <Card.Text>
+                                    {descripcion}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    );
+                })
             }
         </Container>
     )
@@ -67,7 +77,9 @@ const styles = {
     },
     card: {
         width: '100%',
-        marginBottom: '15px'
+        marginBottom: '15px',
+        textAlign: 'left',
+        color: 'black'
     }
 };
 
