@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import styles from './styles.module.scss';
-//import Home from '../Home';
+import Home from '../Home';
 import Viewer from '../Viewer';
 import Content from '../Content';
 import Evaluation from '../Evaluation';
@@ -12,16 +12,16 @@ import _book from '../book2.json';
 
 const App = () => {
 
-  const [book] = useState(_book);
+  const [book, setBook] = useState(_book);
 
   return (
     <Router>
       <div className={styles.App}>
         <Switch>
-          {/* <Route exact path="/" children={() => <Home setBook={setBook}/>}/> */}
-          <Route exact path="/" children={() => <Viewer book={book}/>}/>
-          <Route exact path="/contenido/:id" children={() => <Content book={book}/>}/>
-          <Route exact path="/contenido/:id/evaluation" children={() => <Evaluation book={book}/>}/>
+          <Route exact path="/" children={() => <Home setBook={setBook}/>}/>
+          <Route exact path="/view/:book_id" children={() => <Viewer book={book}/>}/>
+          <Route exact path="/view/:book_id/contenido/:id" children={() => <Content book={book}/>}/>
+          <Route exact path="/view/:book_id/contenido/:id/evaluation" children={() => <Evaluation book={book}/>}/>
           {/* <Route path="/editor" children={() => <Editor />}/> */}
         </Switch>
       </div>
