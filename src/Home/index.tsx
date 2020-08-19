@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -11,11 +10,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import useBooks from './useBooks';
-import { useTheme } from '@material-ui/core/styles';
 import Loader from 'components/Loader';
 
 const Home = () => {
@@ -25,10 +22,9 @@ const Home = () => {
     const [new_book_dialog, setNewBookDialog] = useState<boolean>(false);
     const [new_book_title, setNewBookTitle] = useState<string>('');
     const [new_book_description, setNewBookDescription] = useState<string>('');
-    const theme = useTheme();
 
     async function addBook(){        
-        fetch(`${process.env.REACT_APP_SERVER_URL}/addBook`,{
+        fetch(`${process.env.REACT_APP_SERVER_URL}/books/add`,{
             method: 'POST',
             body: JSON.stringify({
                 new_book_title,

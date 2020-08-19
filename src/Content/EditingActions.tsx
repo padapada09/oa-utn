@@ -35,7 +35,7 @@ const EditingActions = ({index_selector, blocks, content_id, reloadBlocks, setIn
         const previous_block_id = index_selector ? blocks[index_selector - 1].id : null;
         const next_block_id = index_selector < blocks.length ? blocks.length ? blocks[index_selector].id : null : null;
 
-        fetch(`${process.env.REACT_APP_SERVER_URL}/addBlock`,{
+        fetch(`${process.env.REACT_APP_SERVER_URL}/blocks/add`,{
             method: 'POST',
             body: JSON.stringify({
                 new_block_type,
@@ -69,7 +69,7 @@ const EditingActions = ({index_selector, blocks, content_id, reloadBlocks, setIn
 
     async function deleteBlock(){
         if (index_selector === 0) return;
-        fetch(`${process.env.REACT_APP_SERVER_URL}/deleteBlock`,{
+        fetch(`${process.env.REACT_APP_SERVER_URL}/blocks/delete`,{
             method: 'POST',
             body: JSON.stringify({
                 block_id: blocks[index_selector - 1].id,

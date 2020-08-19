@@ -8,7 +8,7 @@ const useContents = (book_id: string): [Content[], boolean, () => void] => {
 
     const reloadContents = useCallback(() => {
         setLoading(true);
-        fetch(`${process.env.REACT_APP_SERVER_URL}/getContenidos?book_id=${book_id}`)
+        fetch(`${process.env.REACT_APP_SERVER_URL}/contents/getAll/${book_id}`)
         .then(res => res.json())
         .then(res => {
             const contenidos = res as Content[];

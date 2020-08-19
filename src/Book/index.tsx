@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -34,7 +33,7 @@ const Book = ({match, history, location} : RouteComponentProps<BookRouteParams>)
     const [new_content_dependencies, setNewContentDependencies] = useState<string[]>([]);
 
     async function addContent(){        
-        fetch(`${process.env.REACT_APP_SERVER_URL}/addContent`,{
+        fetch(`${process.env.REACT_APP_SERVER_URL}/contents/add`,{
             method: 'POST',
             body: JSON.stringify({
                 new_content_title,
@@ -143,14 +142,14 @@ const Book = ({match, history, location} : RouteComponentProps<BookRouteParams>)
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
-                <Button onClick={() => setNewContentDialog(false)} color="primary">
-                    Cancelar
-                </Button>
-                <Button onClick={addContent} color="primary" autoFocus>
-                    Crear
-                </Button>
-            </DialogActions>
-        </Dialog>
+                    <Button onClick={() => setNewContentDialog(false)} color="primary">
+                        Cancelar
+                    </Button>
+                    <Button onClick={addContent} color="primary" autoFocus>
+                        Crear
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

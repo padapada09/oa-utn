@@ -29,7 +29,7 @@ const EditingActions = ({content_id}: EditingActionsProps) => {
     const [new_wrong_answer, setNewWrongAnswer] = useState<string>('');
 
     async function addQuestion() {
-        fetch(`${process.env.REACT_APP_SERVER_URL}/addQuestion`,{
+        fetch(`${process.env.REACT_APP_SERVER_URL}/questions/add`,{
             method: 'POST',
             body: JSON.stringify({
                 new_question_title,

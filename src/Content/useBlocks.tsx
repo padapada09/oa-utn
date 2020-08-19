@@ -7,7 +7,7 @@ const useBlocks = (content_id: string): [Block[], boolean, () => void] => {
     const [loading, setLoading] = useState(true);
 
     const reloadBlocks = useCallback(() => {
-        fetch(`${process.env.REACT_APP_SERVER_URL}/getBloques?content_id=${content_id}`)
+        fetch(`${process.env.REACT_APP_SERVER_URL}/blocks/getAll/${content_id}`)
         .then(res => res.json())
         .then(res => {
             setLoading(false);

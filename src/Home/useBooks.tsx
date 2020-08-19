@@ -8,7 +8,7 @@ const useBooks = (): [Book[], boolean, () => void] => {
 
     const reloadBooks = useCallback(() => {
         setLoading(true);
-        fetch(`${process.env.REACT_APP_SERVER_URL}/getLibros`)
+        fetch(`${process.env.REACT_APP_SERVER_URL}/books/getAll`)
         .then(res => res.json())
         .then(res => {
             setBooks(res as Book[]);

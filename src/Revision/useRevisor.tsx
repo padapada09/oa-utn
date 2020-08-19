@@ -32,7 +32,7 @@ const useRevisor = (content_id: string): Revisor => {
 
         async function setUpRevison() {
             setLoading(true);
-            const questions_response = await fetch(`${process.env.REACT_APP_SERVER_URL}/getRevision?content_id=${content_id}&current_lvl=${localStorage.getItem(content_id) || 0}`);
+            const questions_response = await fetch(`${process.env.REACT_APP_SERVER_URL}/questions/getAll/${content_id}/${localStorage.getItem(content_id) || 0}`);
             const questions = (await questions_response.json()) as Question[];
             if (questions.length) {
                 setPreguntas(questions);
@@ -54,7 +54,7 @@ const useRevisor = (content_id: string): Revisor => {
             console.error(err);
         }
 
-    },[content_id]);
+    },[content_id,history,location]);
 
     function nextQuestion() {
         if (index === preguntas.length - 1) {
