@@ -53,16 +53,18 @@ const Result = ({match: {params: {content_id, score}}, history} : RouteComponent
                     </g>
                 </svg>
             </div>
-            <Container className={styles.ActionContainer}>
-                <Button
-                fullWidth
-                variant="contained"
-                style={{marginBottom: 20}}
-                color="primary"
-                onClick={() => history.go(-2)}>
-                    Volver
-                </Button>
-            </Container>
+            <div className={styles.ActionContainer}>
+                <Container maxWidth="sm">
+                    <Button
+                    fullWidth
+                    variant="contained"
+                    style={{marginBottom: 20}}
+                    color="primary"
+                    onClick={() => history.go(-2)}>
+                        Volver
+                    </Button>
+                </Container>
+            </div>
         </div>
     );
 };
