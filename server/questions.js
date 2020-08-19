@@ -18,13 +18,13 @@ router.get('/getAll/:content_id/:current_lvl', async (req, res) => {
           preguntas.*
        FROM preguntas
        WHERE id_contenido = '${req.params.content_id}'
-       ORDER BY ABS((dificultad/2)-(${req.params.current_lvl}/(
+       ORDER BY ABS((dificultad/2)-(${req.params.current_lvl}*(
        SELECT
-          SUM(dificultad) 
+         MAX(dificultad) 
        FROM (
-          SELECT * FROM preguntas
-          ORDER BY dificultad
-          LIMIT 5
+         SELECT * FROM preguntas
+         ORDER BY dificultad
+         LIMIT 5
        ) AS ordered_preguntas
        ))*(select MAX(dificultad) from preguntas)*RANDOM()) ASC
        LIMIT 5;
