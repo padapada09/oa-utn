@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import useRevisor from './useRevisor';
 import EditingActions from './EditingActions';
@@ -46,21 +47,23 @@ const Revision = ({match} : RouteComponentProps<RevisionRouteParams>) => {
                     }
                 </div>
                 <div className={styles.ButtonContainer}>
-                    <Button
-                    fullWidth
-                    variant="contained"
-                    disabled={!Boolean(revisor.answer)}
-                    disableElevation={!Boolean(revisor.answer)}
-                    onClick={() => {
-                        if (revisor.success === undefined) {
-                            revisor.checkAnswer(pregunta);
-                        } else {
-                            revisor.nextQuestion();
-                        }
-                    }}
-                    color="primary">
-                        {revisor.success !== undefined ? 'Siguiente' : 'Revisar'}
-                    </Button>
+                    <Container maxWidth="sm">
+                        <Button
+                        fullWidth
+                        variant="contained"
+                        disabled={!Boolean(revisor.answer)}
+                        disableElevation={!Boolean(revisor.answer)}
+                        onClick={() => {
+                            if (revisor.success === undefined) {
+                                revisor.checkAnswer(pregunta);
+                            } else {
+                                revisor.nextQuestion();
+                            }
+                        }}
+                        color="primary">
+                            {revisor.success !== undefined ? 'Siguiente' : 'Revisar'}
+                        </Button>
+                    </Container>
                 </div>
             </div>
             { process.env.REACT_APP_MODE === 'editor' && <EditingActions content_id={content_id}/> }

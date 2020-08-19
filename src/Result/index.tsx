@@ -1,6 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import styles from './styles.module.scss';
 
@@ -52,14 +53,16 @@ const Result = ({match: {params: {content_id, score}}, history} : RouteComponent
                     </g>
                 </svg>
             </div>
-            <Button
-            fullWidth
-            variant="contained"
-            style={{marginBottom: 20}}
-            color="primary"
-            onClick={() => history.go(-2)}>
-                Volver
-            </Button>
+            <Container className={styles.ActionContainer}>
+                <Button
+                fullWidth
+                variant="contained"
+                style={{marginBottom: 20}}
+                color="primary"
+                onClick={() => history.go(-2)}>
+                    Volver
+                </Button>
+            </Container>
         </div>
     );
 };
