@@ -1,0 +1,14 @@
+@keyframes slide_in {
+    from {
+        transform: translateY(600px) rotateZ(180deg) scale(0);
+    }
+    to {
+        transform: translateY(0px) rotateZ(0deg) scale(1);
+    }
+}
+
+.Star {
+    animation-name: slide_in;
+    animation-duration: 1s;
+}
+
