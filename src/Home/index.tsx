@@ -57,7 +57,7 @@ const Home = () => {
     return (
         <div>
             {   books.map(book => 
-                    <Card key={book.id} style={{marginTop: 15}}>
+                    <Card key={book.id} style={{marginTop: 15}} data-testid="book">
                         <CardActionArea onClick={() => history.push(book.id)}>
                             <CardHeader
                                 title={book.titulo}

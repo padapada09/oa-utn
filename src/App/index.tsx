@@ -13,7 +13,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <Container maxWidth="sm" className={styles.App}>
+      <Container maxWidth="sm" className={styles.App} data-testid="container">
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route exact path="/:book_id" component={Book}/>

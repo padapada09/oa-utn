@@ -20,7 +20,7 @@ import TextField from '@material-ui/core/TextField';
 import Estrella from './Estrella';
 import Loader from 'components/Loader';
 
-interface BookRouteParams { 
+export interface BookRouteParams { 
     book_id: string
 };
 
@@ -66,10 +66,11 @@ const Book = ({match, history, location} : RouteComponentProps<BookRouteParams>)
     if (loading_contents) return <Loader />;
 
     return (
-        <div>
+        <div data-testid="list">
             {
                 contents.map(content => 
                     <Card 
+                    data-testid="content"
                     key={content.id} 
                     style={{marginTop: 15, backgroundColor: content.recomended ? 'white' : 'lightgray'}}>
                         <CardActionArea onClick={() => history.push(`${location.pathname}/${content.id}`)}>
