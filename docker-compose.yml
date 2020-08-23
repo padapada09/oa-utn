@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+
+  react:
+    build: .
+    working_dir: /usr/src/app
+    stdin_open: true
+    volumes:
+      - ./:/usr/src/app
+      - ./node_modules/:/usr/src/app/node_modules
+    ports:
+      - 3000:3000
+
+  server:
+    restart: always
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    volumes:
+      - ./server:/usr/src/server
+      - ./server/node_modules:/usr/src/server/node_modules
+    environment:
+      PORT: 4000
+    ports:
+      - 4000:4000
+
+  db:
+    image: postgres:12.4
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: docker
+      PGDATA: /opt/pgsql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db_data/docker_pg:/opt/pgsql/data
