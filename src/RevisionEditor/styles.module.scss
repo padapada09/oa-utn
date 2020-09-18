@@ -1,0 +1,91 @@
+.Container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    background-color: indianred;
+    flex-direction: row;
+};
+
+.Sidebar {
+    position: relative;
+    width: 300px;
+    background-color: orange;
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+    };
+};
+
+.MainView {
+    display: flex;
+    flex: 1;
+    background-color: gray;
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+    };
+};
+
+.MainViewHeader {
+    width: calc(100% - 32px);
+    margin-top: 16px;
+    margin-left: 16px;
+};
+
+.MainViewDescription {
+    width: calc(100% - 32px);
+    margin-top: 16px;
+    margin-left: 16px;
+    margin-bottom: 32px;
+};
+
+.MainCardAnswers {
+    flex: 1;
+};
+
+.MainCard {
+    flex: 1;
+    flex-direction: column;
+    margin: 5vw;
+    display: flex;
+};
+
+.AnswersContainer {
+    flex: 1;
+    overflow: auto;
+    margin: 16px;
+
+    &::-webkit-scrollbar {
+        display: none;
+    };
+};
+
+.Answer {
+    display: flex;
+    width: '100%';
+    align-items: center;
+    margin-bottom: 50px;
+};
+
+.MiniatureContainer {
+    width: 100%;
+    text-align: center;
+};
+
+.Miniature:first-child {
+    margin-top: 40px;
+};
+
+.Miniature {
+    position: relative;
+    display: block;
+    width: 220px;
+    height: 220px;
+    margin-left: 40px;
+    margin-bottom: 40px;
+    background-color: khaki;
+};

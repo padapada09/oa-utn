@@ -19,3 +19,14 @@ html {
 body, html, #root {
   height: 100%;
 }
+
+.MobileContainer {
+  display: flex;
+  overflow-x: hidden;
+  z-index: 0;
+  height: 100%;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+};

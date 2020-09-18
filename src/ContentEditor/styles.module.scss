@@ -1,0 +1,55 @@
+.Container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+};
+
+.ToolbarContainer {
+    flex: 1;
+    background-color: rgb(231, 231, 231);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+
+    &::-webkit-scrollbar {
+        display: none;
+    };
+};
+
+.DocumentContainer {
+    flex: 3;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 20px;
+    display: flex;
+
+    &::-webkit-scrollbar {
+        display: none;
+    };
+};
+
+.DroppableToolbar {
+    flex: 1;
+};
+
+.DroppableBin {
+    height: 100px;
+    padding: 25px;
+    background-image: url('https://image.flaticon.com/icons/png/512/93/93480.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+};
+
+.DroppableDocument {
+    flex: 1;
+};
+
+.SaveButton {
+    position: fixed !important;
+    bottom: 3em;
+    right: 3em;
+    z-index: 1;
+};

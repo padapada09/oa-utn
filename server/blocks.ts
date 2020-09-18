@@ -1,102 +1,154 @@
 import express = require('express');
-import { Client } from 'pg';
-import pg_client_settings from './pg_client_settings';
+import { ServerResponse, Block, Response, Title, Text } from 'Types';
+import { DB } from 'Services';
 
 const router = express.Router();
 
-router.get('/getAll/:content_id', async (req, res) => {
+router.get('/get/:content_id', async (req, res : Response<ServerResponse<Block>>) => {
    
-    const client = new Client(pg_client_settings);
-    const query = `
-       with recursive bl (id,tipo,contenido, id_contenido, id_bloque_anterior,orden) as (
-          select b.id,b.tipo, b.contenido, b.id_contenido, b.id_bloque_anterior, 1 as orden
-             from bloques b where b.id_bloque_anterior is null
-          union all
-          select b.id,b.tipo,b.contenido, b.id_contenido, b.id_bloque_anterior,bl.orden+1 as orden
-             from bloques b 
-             inner join bl on bl.id = b.id_bloque_anterior
-       )
-       select bl.* from bl
-       WHERE id_contenido = '${req.params.content_id}'
-       order by bl.orden;
-    `;
- 
-    await client.connect();
-    const response = await client.query(query);
-    await client.end();
-
-    res.send(response.rows);
+   const query = `
+      SELECT * FROM (
+         SELECT DISTINCT * FROM bloques
+         LEFT JOIN textos ON textos.id_bloque = bloques.id
+         LEFT JOIN imagenes ON imagenes.id_bloque = bloques.id
+         LEFT JOIN titulos ON titulos.id_bloque = bloques.id
+         WHERE bloques.id_contenido = $1::uuid
+      ) AS bloques
+      ORDER BY bloques.orden;
+   `;
+   
+   const response = await DB.query<Block>(query,[req.params.content_id]);
+   res.send(response);
 });
 
-router.post('/add', async (req,res) => {
+router.post('/add/:content_id', async (req,res : Response<ServerResponse>) => {
    
-    const client = new Client(pg_client_settings);
-    const add_book = `
-       INSERT INTO 
-       bloques (
-          tipo,
-          contenido,
-          id_contenido
-          ${req.body.previous_block_id === null ? '' : ', id_bloque_anterior'}
-       ) VALUES (
-          '${req.body.new_block_type}',
-          '${req.body.new_block_content}',
-          '${req.body.content_id}'
-          ${req.body.previous_block_id === null ? '' : `, '${req.body.previous_block_id}'`}
-       ) returning id;
-    `;
- 
-    await client.connect();
-       
-    try {
-       const id = (await client.query(add_book)).rows[0].id;
-       if (req.body.next_block_id) {
- 
-          const atatch_next_block = `
-             UPDATE bloques
-             SET id_bloque_anterior = '${id}'
-             WHERE id = '${req.body.next_block_id}';
-          `;
-          await client.query(atatch_next_block);
-       }
-    } catch (err) {
-       res.send({error: `Tuvimos un problema al crear el nuevo libro: ${err}`});
-       return client.end();
-    }
-       
-    res.send({succes: true});
- 
-    client.end();
+   const block = req.body.block;
+
+   const reordering_query = `
+      UPDATE bloques set orden = orden + 1
+      WHERE orden >= $1::integer;
+   `;
+
+   const reordering_response = await DB.query(reordering_query,[block.orden]);
+   if (!reordering_response.success) return res.send({
+      success: false, 
+      error: "Tuvimos un problema al reordenar los bloques"
+   });
+
+   const query = `
+      INSERT INTO 
+      bloques (
+         tipo,
+         id_contenido,
+         orden
+      ) VALUES (
+         $1::text,
+         $2::uuid,
+         $3::integer
+      ) RETURNING *;
+   `;
+   
+   const response = await DB.query<Block>(query,[block.tipo,req.params.content_id,block.orden]);
+
+   if (!response.success) return res.send(response);
+
+   const [inserted_block] = response.data as Block[];
+
+   switch (inserted_block.tipo) {
+      case 'Titulo':
+         const {titulo} = block as Title;
+         const title_query = `INSERT INTO titulos VALUES ($1::uuid, $2::text);`;
+         const title_response = await DB.query<Block>(title_query,[inserted_block.id,titulo]);
+         res.send(title_response);
+         break;
+      case 'Texto':
+         const {texto} = block as Text;
+         const text_query = `INSERT INTO textos VALUES ($1::uuid, $2::text);`;
+         const text_response = await DB.query<Block>(text_query,[inserted_block.id,texto]);
+         res.send(text_response);
+         break;
+      default:
+         res.send({success: false, error: "No existe el tipo de bloque que se intenta agregar"});
+   };
 });
 
-router.post('/delete', async (req,res) => {
+router.get('/remove/:block_id', async (req,res : Response<ServerResponse>) => {
    
-    const client = new Client(pg_client_settings);
-    
-    const add_book = `
-       DELETE FROM bloques
-       WHERE id = '${req.body.block_id}'
-    `;
-    
-    const update_next_block = `
-       UPDATE bloques
-       SET id_bloque_anterior = ${req.body.previous_block_id ? `'${req.body.previous_block_id}'` : 'null'}
-       WHERE id_bloque_anterior = '${req.body.block_id}'
-    `
- 
-    await client.connect();
-    
-    try {
-       await client.query(update_next_block);
-       await client.query(add_book);
-    } catch (err) {
-       res.send({error: `Tuvimos un problema al crear el nuevo libro: ${err}`});
-       return client.end();
-    }
-       
-    res.send({succes: true});
- 
-    client.end();
+   const query = `
+      DELETE FROM bloques
+      WHERE id = $1::uuid returning orden;
+   `;
+
+   const response = await DB.query<Block>(query,[req.params.block_id]);
+   const [{orden}] = response.data as Block[];
+
+   if (!response.success) res.send({success: false, error: "Tuvimos un problema al eliminar el bloque"});
+
+   const reordering_query = `
+      UPDATE bloques SET orden = orden - 1
+      WHERE orden > $1::integer;
+   `;
+
+   const reordering_response = await DB.query(reordering_query,[String(orden)]);
+
+   res.send(reordering_response);
+
+});
+
+router.post('/update', async (req,res : Response<ServerResponse>) => {
+   
+   const block : Block = req.body.block;
+
+   switch (block.tipo) {
+      case 'Titulo':
+         const {titulo} = block as Title; 
+         const titles_query = `UPDATE titulos SET titulo = $1::text WHERE id_bloque = $2::uuid`;
+         const titles_response = await DB.query(titles_query,[titulo,block.id]);
+         res.send(titles_response);
+         break;
+      case 'Texto':
+         const {texto} = block as Text; 
+         const textos_query = `UPDATE textos SET texto = $1::text WHERE id_bloque = $2::uuid`;
+         const textos_response = await DB.query(textos_query,[texto,block.id]);
+         res.send(textos_response);
+         break;
+   };
+
+});
+
+router.get('/sort/:block_id/:new_index/:previous_index', async (req,res : Response<ServerResponse>) => {
+   
+   const query = `
+      UPDATE bloques
+      SET orden = $1::integer
+      WHERE id = $2::uuid;
+   `;
+   
+   const response = await DB.query(query,[req.params.new_index,req.params.block_id]);
+
+   if (!response.success) return res.send({success: false, error: "Tuvimos un problema al actualizar el orden del bloque"});
+
+   if (req.params.previous_index > req.params.new_index) {
+      const reordering_query = `
+         UPDATE bloques
+         SET orden = orden + 1
+         WHERE orden >= $1::integer AND orden < $2::integer AND id <> $3::uuid;
+      `;
+      const reordering_response = await DB.query(reordering_query,[req.params.new_index,req.params.previous_index,req.params.block_id]);
+      res.send(reordering_response);
+   } else {
+
+      const reordering_query = `
+         UPDATE bloques
+         SET orden = orden - 1
+         WHERE orden <= $1::integer AND orden > $2::integer AND id <> $3::uuid;
+      `;
+
+      const reordering_response = await DB.query(reordering_query,[req.params.new_index,req.params.previous_index,req.params.block_id]);
+
+      res.send(reordering_response);
+   }
 });
 
 export default router;

@@ -1,52 +1,71 @@
 import express = require('express');
-import { Client } from 'pg';
-import pg_client_settings from './pg_client_settings';
+import { ServerResponse, Book, Response } from 'Types';
+import { DB } from 'Services';
 
 const router = express.Router();
 
-router.get('/getAll', async (req, res) => {
+router.get('/get/:id', async (req, res : Response<ServerResponse<Book>>) => {
 
-   const client = new Client(pg_client_settings);
-   try {
-      await client.connect();
-   } catch (err) {
-      res.send({
-         error: "Tuvimos un problema al conectarnos con la base de datos;", 
-         incoming_error: err
-      });
-   } finally {
-      const query = `SELECT * FROM libros;`;
-      const response = await client.query(query);
-      res.send(response.rows);
-      client.end();
+   if (req.params.id === 'all') {
+      const query = `SELECT * FROM libros`;
+      const response = await DB.query<Book>(query);
+      res.send(response);
+   } else {
+      const query = `SELECT * FROM libros WHERE id = $1::uuid`;
+      const response = await DB.query<Book>(query,[req.params.id]);
+      res.send(response);
    }
+
 });
 
-router.post('/add', async (req,res) => {
+router.post('/add', async (req,res : Response<ServerResponse>) => {
+
+   const query = `
+      INSERT INTO 
+      libros (
+         titulo,
+         descripcion
+      ) VALUES (
+         $1::text,
+         $2::text
+      );
+   `;
+
+   const response = await DB.query(query,[req.body.book.titulo,req.body.book.descripcion]);
+
+   res.send(response);
+});
+
+router.get('/remove/:book_id', async (req, res : Response<ServerResponse>) => {
+
+   const query = `
+      DELETE FROM
+         libros
+      WHERE id = $1::uuid;
+   `;
+
+   const response = await DB.query(query,[req.params.book_id]);
+   res.send(response);
+});
+
+router.post('/edit', async (req, res) => {
    
-    const client = new Client(pg_client_settings);
-    const query = `
-       INSERT INTO 
-       libros (
-          titulo,
-          descripcion
-       ) VALUES (
-          '${req.body.new_book_title}',
-          '${req.body.new_book_description}'
-       );
-    `;
- 
-    await client.connect();   
-    try {
-       await client.query(query);
-    } catch (err) {
-       res.send({error: `Tuvimos un problema al crear el nuevo libro: ${err}`});
-       return client.end();
-    }
-       
-    res.send({succes: true});
-    client.end();
+   const query = `
+      UPDATE libros
+      SET 
+         titulo = $1::text,
+         descripcion = $2::text
+      WHERE id = $3::uuid;
+   `;
 
+   const params = [
+      req.body.book.titulo,
+      req.body.book.descripcion,
+      req.body.book.id
+   ];
+   
+   const response = await DB.query(query,params);
+   res.send(response);
 });
- 
+
 export default router;

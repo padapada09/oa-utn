@@ -1,6 +1,6 @@
 {
-    "watch": ["."],
+    "watch": [".","./Services","./Types"],
     "ext": "ts",
     "ignore": ["./*.spec.ts"],
-    "exec": "npx ts-node ./index.ts"
+    "exec": "npx ts-node -r tsconfig-paths/register --project ./tsconfig.json"
 }
