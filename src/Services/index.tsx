@@ -5,7 +5,7 @@ import Blocks from './Blocks';
 
 export { Books, Contents, Blocks };
 
-export async function post<T = void>(url : string, body: any) : Promise<ServerResponse<T>> {
+export async function post<T = void>(url : string, body: any = {}) : Promise<ServerResponse<T>> {
     try {
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}${url}`,{
             method: 'POST',

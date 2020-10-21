@@ -104,7 +104,10 @@ const BookEditor = ({match, history, location} : RouteComponentProps<BookRoutePa
                                     }
                                 })}
                             />
-                            <FormControl fullWidth style={{marginTop: 10}}>
+                            <FormControl 
+                            disabled={!Boolean(contents.filter(other_content => other_content.id !== content.id).filter(other_content => !dependsOf(other_content,content,contents)).length)}
+                            fullWidth 
+                            style={{marginTop: 10}}>
                                 <InputLabel id="demo-simple-select-label">Dependencias</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"

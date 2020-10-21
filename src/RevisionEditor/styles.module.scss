@@ -9,7 +9,7 @@
 .Sidebar {
     position: relative;
     width: 300px;
-    background-color: orange;
+    background-color: rgb(255, 255, 255);
     overflow-x: hidden;
     overflow-y: scroll;
 
@@ -31,6 +31,7 @@
 };
 
 .MainViewHeader {
+    display: flex;
     width: calc(100% - 32px);
     margin-top: 16px;
     margin-left: 16px;
@@ -87,5 +88,28 @@
     height: 220px;
     margin-left: 40px;
     margin-bottom: 40px;
-    background-color: khaki;
+
+    .MiniatureContent { 
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        .MiniatureBody {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: xx-large;   
+        }
+    };
 };
+
+.Selected {
+    -webkit-box-shadow: 2px 10px 58px 9px rgba(168,168,168,1) !important;
+    -moz-box-shadow: 2px 10px 58px 9px rgba(168,168,168,1) !important;
+    box-shadow: 2px 10px 58px 9px rgba(168,168,168,1) !important;
+}

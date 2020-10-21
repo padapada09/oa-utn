@@ -1,0 +1,8 @@
+1
+/opt/pgsql/data
+1601818815
+5432
+/var/run/postgresql
+*
+  5432001         0
+stopping
