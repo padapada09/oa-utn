@@ -28,6 +28,7 @@ const App = () => {
         <Route exact path="/:book_id/:content_id/revision/editor" component={RevisionEditor}/>
         <Route exact path="/:book_id/:content_id/revision/result/:score" component={Result}/>
         <Route exact path="/:book_id/:content_id/revision/no_revision" component={NoRevision}/>
+        <Route children={() => <p>Ruta desconocida</p>} />
       </Switch>
     </BrowserRouter>
   );

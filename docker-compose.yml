@@ -7,8 +7,11 @@ services:
     working_dir: /usr/src/app
     stdin_open: true
     volumes:
-      - ./:/usr/src/app
-      - ./node_modules/:/usr/src/app/node_modules
+      - ./src:/usr/src/app/src
+      - ./.env:/usr/src/app/.env
+      - ./package.json:/usr/src/app/package.json
+      - ./tsconfig.json:/usr/src/app/tsconfig.json
+      # - ./node_modules/:/usr/src/app/node_modules
     ports:
       - 3000:3000
 
