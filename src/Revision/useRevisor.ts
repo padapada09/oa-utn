@@ -23,15 +23,19 @@ const useRevisor = (content_id : string) : Revisor => {
     const [selected, setSelected] = useState<string>(``);
     const [confirmed, setConfirmed] = useState<boolean>(false);
     const [scores, setScores] = useState<number[]>([]);
+    const [maxScore, setMaxScore] = useState<number>(1);
     const history = useHistory();
     const location = useLocation();
 
     useAsyncEffect(async () => {
-        const response = await get<Question[]>(`/questions/get/${content_id}/${window.localStorage.getItem(content_id)}`);
+        const response = await get<Question[]>(`/questions/get/${content_id}/${window.localStorage.getItem(content_id) || 0}`);
+        const max_score_response = await fetch(`${process.env.REACT_APP_SERVER_URL}/contents/getMaxScore/${content_id}`);
+        const max_score = parseFloat(await max_score_response.text());
         if (response.success && response.data.length) {
             setPreguntas(response.data);
             setLoading(false);
             setPregunta(response.data[0]);
+            setMaxScore(max_score);
         } else {
             history.replace(`${location.pathname}/no_revision`);
         };
@@ -43,7 +47,7 @@ const useRevisor = (content_id : string) : Revisor => {
 
     function confirm() {
         setConfirmed(true);
-        setScores(prev => [...prev, pregunta?.respuestas.find(({id}) => id === selected)?.valoracion || 0]);
+        setScores(prev => [...prev, (pregunta?.respuestas.find(({id}) => id === selected)?.valoracion || 0) * (pregunta?.dificultad || 0)]);
     };
 
     function next() {
@@ -53,9 +57,10 @@ const useRevisor = (content_id : string) : Revisor => {
             setConfirmed(false);
             setSelected(``);
         } else {
-            const newScore = scores.reduce((score, total) => total + score,0)/scores.length;
+            const newScore = scores.reduce((score, total) => total + score,0)/maxScore;
             const prevScore = parseFloat(window.localStorage.getItem(content_id) || "0");
             history.push(`${location.pathname}/result/${(newScore + prevScore)/2}`);
+            window.localStorage.setItem(content_id,String((newScore+prevScore)/2));
         }
     };
 
