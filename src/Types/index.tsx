@@ -33,6 +33,8 @@ export interface Title extends Block {
 };
 
 export interface Answer {
+    id: string,
+    id_pregunta: string,
     descripcion: string,
     valoracion: number,
     feedback: string

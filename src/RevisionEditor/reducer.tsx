@@ -6,12 +6,13 @@ interface Action {
         | "addAnswer" 
         | "removeAnswer"
         | "setAnswer"
-        | "selectQuestion",
+        | "selectQuestion"
+        | "setDificulty",
     payload?: string | Answer | number | Question,
     index?: number
 };
 
-function reducer (question : Question | Partial<Question>, {type, payload, index} : Action) : Question | Partial<Question> {
+function reducer (question : Question | undefined = undefined, {type, payload, index} : Action) : Question | undefined {
 
     switch (type) {
         case "setTitle": 
@@ -25,7 +26,7 @@ function reducer (question : Question | Partial<Question>, {type, payload, index
                 descripcion: payload as string
             } as Question;
         case "addAnswer": 
-            const new_answer : Answer = {
+            const new_answer : Partial<Answer> = {
                 descripcion: "",
                 valoracion: 0,
                 feedback: ""
@@ -46,6 +47,11 @@ function reducer (question : Question | Partial<Question>, {type, payload, index
                     if (i !== index as number) return respuesta;
                     else return {...(payload as Answer)};
                 })
+            } as Question;
+        case "setDificulty":
+            return {
+                ...question,
+                dificultad: payload === '' ? undefined : parseInt(payload as string)
             } as Question;
         case "selectQuestion": return payload as Question
         default: return question as Question;

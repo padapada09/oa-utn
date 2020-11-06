@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { RevisionRouteParams } from 'Revision';
+import { Question } from 'Types';
 import { useQuestions } from 'Hooks';
 import styles from './styles.module.scss';
 import reducer from './reducer';
@@ -14,20 +15,38 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem, Typography
 } from '@material-ui/core';
 import { post } from 'Services';
 
-const RevisionEditor = ({match} : RouteComponentProps<RevisionRouteParams>) => {
+const RevisionEditor = ({match: {params: {content_id}}} : RouteComponentProps<RevisionRouteParams>) => {
+    const [questions, reloadQuestions] = useQuestions(content_id);
+    const [selected_question, dispatch] = useReducer(reducer,undefined);
 
-    const [questions] = useQuestions(match.params.content_id);
-    const [question, dispatch] = useReducer(reducer,{});
+    async function addQuestion() {
+        const response = await post<Question>("/questions/add",{content_id});
+        if (response.success) {
+            reloadQuestions();
+        } else {
+            console.error("Tuvimos un problema al agregar una nueva preugnta",response.error);
+        }
+    };
 
-    // console.log(question);
-
-    async function saveQuestion() {
+    async function saveQuestion(question: Question) {
         const response = await post("/questions/edit",{question});
-        // console.log(response);
+        if (response.success) {
+            reloadQuestions();
+        } else {
+            alert(`Parece que tuvimos un problema. ${JSON.stringify(response.error)}`)
+        }
+    };
+
+    async function removeQuestion(question: Question) {
+        const response = await post("/questions/delete",{id: question.id});
+        if (response.success) {
+            reloadQuestions();
+            dispatch({type: "selectQuestion", payload: undefined});
+        }
     };
 
     return (
@@ -36,28 +55,57 @@ const RevisionEditor = ({match} : RouteComponentProps<RevisionRouteParams>) => {
                 {   questions.map(question => (
                         <Card  
                         key={question.id} 
-                        classes={{root: styles.Miniature}}>
+                        classes={{root: `${styles.Miniature} ${question.id === selected_question?.id ? styles.Selected : ''}`}}>
                             <CardActionArea 
-                                style={{width: '100%', height: '100%'}}
+                                classes={{root: `${styles.MiniatureContent}`}}
                                 onClick={() => dispatch({
                                     type: "selectQuestion", 
                                     payload: question
                                 })}
-                            />
+                            >
+                                <Typography style={{margin: 5}}>
+                                    {question.titulo}
+                                </Typography>
+                                <div className={styles.MiniatureBody}>
+                                    {question.dificultad}
+                                </div>
+                            </CardActionArea>
                         </Card>
                 ))}
+                <Card  
+                classes={{root: styles.Miniature}}>
+                    <CardActionArea 
+                    onClick={addQuestion}
+                    classes={{root: styles.MiniatureContent}}>
+                        <div className={styles.MiniatureBody}>
+                            ➕
+                        </div>
+                    </CardActionArea>
+                </Card>
             </div>
             <div className={styles.MainView}>
-                {   (question && question.respuestas) &&
+                {   selected_question &&
                     <Card classes={{root: styles.MainCard}}>
                         <div className={styles.MainViewHeader}>
                             <TextField 
                                 label="Titulo"
                                 variant="outlined"
-                                value={question.titulo}
+                                value={selected_question.titulo}
                                 fullWidth
+                                style={{flex: 5, marginRight: 10}}
                                 onChange={event => dispatch({
                                     type: "setTitle",
+                                    payload: event.target.value as string
+                                })}
+                            />
+                            <TextField 
+                                label="Dificultad"
+                                variant="outlined"
+                                value={selected_question.dificultad || ''}
+                                fullWidth
+                                style={{flex: 1}}
+                                onChange={event => dispatch({
+                                    type: "setDificulty",
                                     payload: event.target.value as string
                                 })}
                             />
@@ -66,7 +114,7 @@ const RevisionEditor = ({match} : RouteComponentProps<RevisionRouteParams>) => {
                             <TextField 
                                 label="Descripción"
                                 variant="outlined"
-                                value={question.descripcion}
+                                value={selected_question.descripcion}
                                 fullWidth
                                 multiline
                                 rowsMax={7}
@@ -77,7 +125,7 @@ const RevisionEditor = ({match} : RouteComponentProps<RevisionRouteParams>) => {
                             />
                         </div>
                         <CardContent classes={{root: styles.AnswersContainer}}>
-                            {   question.respuestas.map((respuesta,index) => (
+                            {   selected_question.respuestas?.map((respuesta,index) => (
                                     <div key={index} className={styles.Answer}>
                                         <FormControl 
                                         variant="outlined"
@@ -153,11 +201,17 @@ const RevisionEditor = ({match} : RouteComponentProps<RevisionRouteParams>) => {
                             ))}
                         </CardContent>
                         <CardActions>
-                            <Button onClick={saveQuestion}>
+                            <Button 
+                            disabled={JSON.stringify(questions.find(({id}) => id === selected_question.id)) === JSON.stringify(selected_question)}
+                            onClick={() => saveQuestion(selected_question)}>
                                 Guardar
                             </Button>
                             <Button onClick={() => dispatch({type: "addAnswer"})}>
                                 Agregar respuesta
+                            </Button>
+                            <Button 
+                            onClick={() => removeQuestion(selected_question)}>
+                                Eliminar
                             </Button>
                         </CardActions>
                     </Card>
