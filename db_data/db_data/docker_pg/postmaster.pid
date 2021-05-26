@@ -1,8 +1,0 @@
-1
-/opt/pgsql/data
-1600011035
-5432
-/var/run/postgresql
-*
-  5432001         0
-stopping
